@@ -19,11 +19,13 @@ export default class Add extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         // document.getElementById('uploadBtn').click();
-        const data = {"name":this.state.certName,
-                    "serial":this.state.certSerial,
-                    "title":this.state.certTitle,
-                    "date":this.state.certDate}
-        const body = JSON.stringify(data);
+        const body = new FormData();
+
+        body.append("name",this.state.certName)
+        body.append("title",this.state.certTitle)
+        body.append("serial",this.state.certSerial)
+        body.append("date",this.state.certDate)
+        body.append("certImg",document.getElementById("uploadInput").files[0])
 
         fetch('http://localhost/bcicerts/backend/api/cert/create',
             {
@@ -31,8 +33,8 @@ export default class Add extends Component {
                 body,
             })
             .then(res => res.json())
-            .then(data => {
-                this.handleUpload(data.message);
+            .then(success => {
+                alert(success.message)
                 this.setState({
                     certSerial:'',
                     certName:'',
@@ -80,9 +82,9 @@ export default class Add extends Component {
                 <input type="date" value={this.state.certDate} onChange={this.handleChange} className="form-control" name="certDate" aria-describedby="emailHelp" required/>
                 <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
             </div>
-                <div className="form-group">
-                    <input id="uploadInput" type="file" value={this.state.certImg} onChange={this.handleChange} className="form-control" name="certImg" aria-describedby="emailHelp" required/>
-                </div>
+            <div className="form-group">
+                <input id="uploadInput" type="file" value={this.state.certImg} onChange={this.handleChange} className="form-control" name="certImg" aria-describedby="emailHelp" required/>
+            </div>
             <div className="row">
             <button type="submit" className="btn btn-primary ml-auto ">Submit</button>
             </div>

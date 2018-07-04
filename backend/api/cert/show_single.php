@@ -14,7 +14,7 @@
   $Cert = new Cert($db);
 
   // Get ID
-  $Cert->id = isset($_GET['id']) ? $_GET['id'] : die();
+  $Cert->serial = isset($_GET['serial']) ? $_GET['serial'] : die();
 
   // Get Cert
   $Cert->read_single();
@@ -26,6 +26,7 @@
     'name' => $Cert->name,
     'date' => $Cert->date,
     'serial' => $Cert->serial,
+    'img'=> $Cert->img
   );
 
   // Make JSON

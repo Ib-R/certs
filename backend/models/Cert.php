@@ -26,7 +26,8 @@
             title,
             '.$certSerial.',
             '.$certDate.',
-            '.$certName.'
+            '.$certName.',
+            img
           FROM
             ' . $this->table ;
       
@@ -47,18 +48,19 @@
        p.name,
        p.title,
        p.date,
-       p.serial
+       p.serial,
+       p.img
       FROM
         ' . $this->table . ' p
       WHERE
-        p.id = ?
+        p.serial = ?
       LIMIT 0,1';
 
       // Prepare statement
       $stmt = $this->conn->prepare($query);
 
       // Bind ID
-      $stmt->bindParam(1, $this->id);
+      $stmt->bindParam(1, $this->serial);
 
       // Execute query
       $stmt->execute();
@@ -66,10 +68,12 @@
       $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
       // Set properties
+      $this->id = $row['id'];
       $this->title = $row['title'];
       $this->name = $row['name'];
       $this->serial = $row['serial'];
       $this->date = $row['date'];
+      $this->img = $row['img'];
     }
 
     // Create Post
@@ -81,7 +85,8 @@
           title = :title,
           name = :name,
           serial = :serial,
-          date = :date';
+          date = :date,
+          img = :img';
 
       // Prepare statement
       $stmt = $this->conn->prepare($query);
@@ -97,6 +102,7 @@
       $stmt->bindParam(':serial', $this->serial);
       $stmt->bindParam(':name', $this->name);
       $stmt->bindParam(':date', $this->date);
+      $stmt->bindParam(':img',$this->img);
 
       // Execute query
       if($stmt->execute()) {
@@ -111,6 +117,11 @@
 
     // Update Post
     public function update() {
+      // Check for image change
+      $img ='';
+      if($this->img != ''){
+        $img = ',img = :img';
+      }
       // Create query
       $query = 'UPDATE ' . 
           $this->table . '
@@ -118,7 +129,8 @@
           title = :title,
           name = :name,
           date = :date,
-          serial = :serial
+          serial = :serial'
+          .$img.'
         WHERE
           id = :id';
 
@@ -138,6 +150,9 @@
       $stmt->bindParam(':date', $this->date);
       $stmt->bindParam(':serial', $this->serial);
       $stmt->bindParam(':id', $this->id);
+      if($this->img != ''){ // check for image change
+        $stmt->bindParam(':img', $this->img);
+      }
 
       // Execute query
       if($stmt->execute()) {

@@ -7,6 +7,7 @@
 
   include_once '../../Database.php';
   include_once '../../models/Cert.php';
+  include_once 'upload.php';
 
   // Instantiate DB & connect
   $database = new Database();
@@ -16,17 +17,23 @@
   $cert = new Cert($db);
 
   // Get raw posted data
-  $data = json_decode(file_get_contents("php://input"));
+  $name = $title = $serial = $date = '';
 
-  $cert->title = $data->title;
-  $cert->serial = $data->serial;
-  $cert->name = $data->name;
-  $cert->date = $data->date;
+  $name = $_POST['name'];
+  $title = $_POST['title'];
+  $serial = $_POST['serial'];
+  $date = $_POST['date'];
+
+  $cert->title = $title;
+  $cert->serial = $serial;
+  $cert->name = $name;
+  $cert->date = $date;
+  $cert->img = $fileNameToSave;
 
   // Create post
   if($cert->create()) {
     echo json_encode(
-      array('message' => 'Post Created')
+      array('message' => 'Post Created and '.$msg)
     );
   } else {
     echo json_encode(

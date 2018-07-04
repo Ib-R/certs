@@ -21,7 +21,8 @@ export default class Edit extends Component {
           certTitle: data.title,
           certName: data.name,
           certDate: data.date,
-          certSerial: data.serial
+          certSerial: data.serial,
+          certImg:data.img
         })
       })
   }
@@ -32,16 +33,18 @@ export default class Edit extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-      const data = {"id":this.state.certId,
-                  "name":this.state.certName,
-                  "serial":this.state.certSerial,
-                  "title":this.state.certTitle,
-                  "date":this.state.certDate}
-      const body = JSON.stringify(data);
+    const body = new FormData();
+
+    body.append("id",this.state.certId)
+    body.append("name",this.state.certName)
+    body.append("title",this.state.certTitle)
+    body.append("serial",this.state.certSerial)
+    body.append("date",this.state.certDate)
+    body.append("certImg",document.getElementById("uploadInput").files[0])
 
       fetch('http://localhost/bcicerts/backend/api/cert/update',
           {
-              method: "PUT",
+              method: "POST",
               body,
           })
           .then(res => res.json())
@@ -89,6 +92,9 @@ export default class Edit extends Component {
           <div className="form-group">
               <input type="date" value={this.state.certDate} onChange={this.handleChange} className="form-control" name="certDate" aria-describedby="emailHelp" required/>
               <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
+          </div>
+          <div className="form-group">
+                <input id="uploadInput" type="file" value={this.state.certImg} onChange={this.handleChange} className="form-control" name="certImg" aria-describedby="emailHelp"/>
           </div>
           <div className="row">
           <input type="button" onClick={this.handleDelete} className="btn btn-danger ml-0 " value="Delete"/>

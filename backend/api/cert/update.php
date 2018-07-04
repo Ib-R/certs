@@ -1,12 +1,13 @@
 <?php 
   // Headers
   header('Access-Control-Allow-Origin: *');
-  header('Content-Type: application/json');
-  header('Access-Control-Allow-Methods: PUT');
+  // header('Content-Type: application/json');
+  // header('Access-Control-Allow-Methods: PUT');
   header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,Access-Control-Allow-Methods, Authorization, X-Requested-With');
 
   include_once '../../Database.php';
   include_once '../../models/Cert.php';
+  include_once 'upload.php';
 
   // Instantiate DB & connect
   $database = new Database();
@@ -16,14 +17,25 @@
   $cert = new Cert($db);
 
   // Get raw certed data
-  $data = json_decode(file_get_contents("php://input"));
+  $name = $id = $title = $serial = $date = '';
 
-  // Set ID to update
-  $cert->id = $data->id;
-  $cert->title = $data->title;
-  $cert->name = $data->name;
-  $cert->date = $data->date;
-  $cert->serial = $data->serial;
+  $id = $_POST['id'];
+  $name = $_POST['name'];
+  $title = $_POST['title'];
+  $serial = $_POST['serial'];
+  $date = $_POST['date'];
+
+  // Assign data
+  $cert->id = $id;
+  $cert->title = $title;
+  $cert->serial = $serial;
+  $cert->name = $name;
+  $cert->date = $date;
+  if($fileNameToSave != ''){
+    $cert->img = $fileNameToSave;
+  }else{
+    $cert->img = '';
+  }
 
   // Update cert
   if($cert->update()) {

@@ -33,6 +33,7 @@
         'serial' => $serial,
         'name' => html_entity_decode($name),
         'date' => $date,
+        'img' => $img
       );
 
       // Push to "data"
