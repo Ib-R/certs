@@ -12,7 +12,7 @@ export default class Search extends Component {
     handleChange = (e)=>{
         this.setState({[e.target.name]:[e.target.value]});
 
-        fetch(`http://localhost/bcicerts/backend/api/cert/show_single?serial=${e.target.value}`)
+        fetch(`http://localhost/certs/backend/api/cert/show_single?serial=${e.target.value}`)
         .then(res => res.json())
         .then(data => {
             this.setState({
@@ -26,7 +26,7 @@ export default class Search extends Component {
       
       const cert = (this.state.name != null ? 
         <div>
-            <img src={`http://localhost/bcicerts/backend/api/cert/uploads/${this.state.img}`} width="200" alt=""/> 
+            <img src={`http://localhost/certs/backend/api/cert/uploads/${this.state.img}`} width="200" alt=""/> 
             <strong>Name: </strong>{this.state.name} 
             <strong>Title: </strong>{this.state.title}
             <strong>Serial: </strong>{this.state.serial}

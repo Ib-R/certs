@@ -27,7 +27,7 @@ export default class Add extends Component {
         body.append("date",this.state.certDate)
         body.append("certImg",document.getElementById("uploadInput").files[0])
 
-        fetch('http://localhost/bcicerts/backend/api/cert/create',
+        fetch('http://localhost/certs/backend/api/cert/create',
             {
                 method: "POST",
                 body,
@@ -50,7 +50,7 @@ export default class Add extends Component {
         const body = new FormData();
         body.append('certImg',file);
 
-        fetch('http://localhost/bcicerts/backend/api/cert/upload',
+        fetch('http://localhost/certs/backend/api/cert/upload',
         {
             method: 'POST',
             body,

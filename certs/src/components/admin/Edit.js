@@ -13,7 +13,7 @@ export default class Edit extends Component {
   }
 
   componentWillMount(){
-    fetch('http://localhost/bcicerts/backend/api/cert/show_single?id='+[this.props.location.state.id]+'')
+    fetch('http://localhost/certs/backend/api/cert/show_single?id='+[this.props.location.state.id]+'')
       .then(res => res.json())
       .then(data => {
         this.setState({
@@ -42,7 +42,7 @@ export default class Edit extends Component {
     body.append("date",this.state.certDate)
     body.append("certImg",document.getElementById("uploadInput").files[0])
 
-      fetch('http://localhost/bcicerts/backend/api/cert/update',
+      fetch('http://localhost/certs/backend/api/cert/update',
           {
               method: "POST",
               body,
@@ -59,7 +59,7 @@ export default class Edit extends Component {
     const body = JSON.stringify({"id":this.state.certId});
 
     if(confirm){
-      fetch('http://localhost/bcicerts/backend/api/cert/delete',
+      fetch('http://localhost/certs/backend/api/cert/delete',
     {
       method: "DELETE",
       body
